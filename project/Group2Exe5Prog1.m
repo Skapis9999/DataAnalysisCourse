@@ -1,4 +1,4 @@
-%For [0,20] I predict y deaths with x(t-τ) cases
+%For [0,20] I predict y deaths with x(t-Ο„) cases
 %Compare and find best latency
 %Diagnostic with standarised errror
 %
@@ -56,4 +56,21 @@ for country = 1:N_countries
     end
 end
 
+Se(isnan(Se))=0;
+Mse(isnan(Mse))=0;
+maxSe = zeros(1,N_countries);
+maxSeIndex = zeros(1,N_countries);
+for country = 1:N_countries
+    maximum = max(Se(:, country));
+    maxSe(country) = maximum;
+    %maxSeIndex(country) = find(Se(:, country) == maximum);        
+end
+
+maxMse = zeros(1,N_countries);
+maxMseIndex = zeros(1,N_countries);
+for country = 1:N_countries
+    maximum = max(Mse(:, country));
+    maxMse(country) = maximum;
+    maxMseIndex(country) = find(Mse(:, country) == maximum);        
+end
 
