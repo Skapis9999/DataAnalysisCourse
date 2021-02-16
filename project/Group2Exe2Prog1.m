@@ -1,9 +1,9 @@
-% Kapoglis Konstantinos 9433
-% Skapetis Christos 9378
+%% Kapoglis Konstantinos 9433
+%% Skapetis Christos 9378
 
-% issues: UK deaths N/A MSE solved
+% issues: UK deaths N/A MSE - solved
 
-% Countries:
+%% Countries:
 % Original: Belgium
 % -------------------
 % name      pd_ids
