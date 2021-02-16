@@ -1,7 +1,8 @@
-% Kapoglis Konstantinos 9433
-% Skapetis Christos 9378
+%% Kapoglis Konstantinos 9433
+%% Skapetis Christos 9378
 
-% Bulgaria and Kosovo, the two countries we had to choose, had not two
+%% Bulgaria and Kosovo,
+% the two countries we had to choose, had not two
 % discrete waves so we decided to choose Belgium which is near Bulgaria
 clear all
 
@@ -59,7 +60,7 @@ end
 
 [B, I] = sort(MSE_Cases);
 
-Dist_Names(I)
+Dist_Names(I);
 B;
  figure(pd_count+2)
  plot(DeathsBelgium/sum(DeathsBelgium))
@@ -71,9 +72,10 @@ for pdi =  1:pd_count
     end
 end
 [B, I] = sort(MSE_Deaths);
-Dist_Names(I)
+Dist_Names(I);
 B;
 
+%%finding the optimal distribution
 function [pd, Dist_Names] = AllDistributions(x, pd, Dist_Names)
     pd_model = fitdist((x)', 'Normal');
     Dist_Names(1, :) = pd_model.DistributionName;
@@ -145,6 +147,7 @@ function [pd, Dist_Names] = AllDistributions(x, pd, Dist_Names)
 
 end
 
+%% Comments
 
 % We observe that for the Cases the minimum values for the Least Square Error
 % is achieved for the Negative Binomial Distribution, while the General
