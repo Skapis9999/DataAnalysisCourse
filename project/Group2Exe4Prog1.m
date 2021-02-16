@@ -64,8 +64,10 @@ end
  end
 
 maxPearsonValues = zeros(1,N_countries); 
+maxPearsonValuesIds = zeros(1,N_countries); 
 for pdi = 1:N_countries
-    maximum = max(max(pearsonValues(:, pdi)));
+    [maximum,I] = max(max(pearsonValues(:, pdi)));
+    maxPearsonValuesIds = I;
     maxPearsonValues(pdi) = find(pearsonValues(:, pdi)==maximum)-20;        %-20 so that I can have values from -20 to 20
 end
 
