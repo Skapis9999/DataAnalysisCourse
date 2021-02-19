@@ -53,7 +53,7 @@ for country = 1:N_countries
         covXY = cov(x,y);
         %r=cov(X,Y)/(sigmaX*sigmaY)
         pearsonValues(t+21, country)=covXY(1,2)/(sigmaX*sigmaY);
-    end
+     end
 end
    
  for pdi = 1:N_countries
@@ -64,12 +64,13 @@ end
  end
 
 maxPearsonValues = zeros(1,N_countries); 
-maxPearsonValuesIds = zeros(1,N_countries); 
+%maxPearsonValuesIds = zeros(1,N_countries); mallon ahristo
 for pdi = 1:N_countries
     [maximum,I] = max(max(pearsonValues(:, pdi)));
-    maxPearsonValuesIds = I;
+    %maxPearsonValuesIds(pdi) = I;
     maxPearsonValues(pdi) = find(pearsonValues(:, pdi)==maximum)-20;        %-20 so that I can have values from -20 to 20
 end
 
-
+fprintf("Country %s has maximum correlation when deaths have a delay of %d days",...
+    countryNames(:), (maxPearsonValues(:)- t - 1))
 
