@@ -72,5 +72,11 @@ for pdi = 1:N_countries
 end
 
 fprintf("Country %s has maximum correlation when deaths have a delay of %d days",...
-    countryNames(:), (maxPearsonValues(:)- t - 1))
+    countryNames(:),maxPearsonValues(:))
 
+%maxPearsonValues shows us that deaths indeed have a delay comparing with
+%the cases in the most of the cases.
+%In Task 4 the delay is [6, 1, 3, 14,19,7, 13,7,-12,8,11,12]
+%In Task 3 the delay is [0, 0, 0, 0, 30,19,0, 1, 2, 0, 1, 1] for
+%distribution and       [-2,-2,16,19,18,6,27,4,-77,7, -2,8] for data
+%The 2 tasks do not give us the same result.
