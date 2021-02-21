@@ -1,6 +1,5 @@
 % Kapoglis Konstantinos 9433
 % Skapetis Christos 9378
-
 clear all
 
 countryNames = ["Belgium", "UK", "Ireland", "Germany", "Norway", "Italy", "Austria", "Sweden",...
@@ -23,43 +22,36 @@ countryIDs = [14+j, 148+j, 66+j, 53+j, 104+j, 68+j, 9+j,...
 startWave = [60, 60, 65, 60, 58, 58, 64, 64, 50, 60, 66, 68];
 endWave = [180, 200, 176, 150, 178, 170, 123, 139, 244, 142, 105, 117];
 
+T = 40
+tmax = 20
 N_countries = length(countryIDs);
 pearsonValues = zeros(40, N_countries); %40 because I get -20 to 20
 
 for country = 1:N_countries
     x_Country= startWave(country):1:endWave(country);
-    x_Country_Extended = (startWave(country)-20):1:(endWave(country)+20);
+    x_Country_Extended = (startWave(country)-tmax):1:(endWave(country)+tmax);
     wave1 = world(countryIDs(country), x_Country);
     wave1(isnan(wave1))=0;
-    deaths1 = worldDeaths(countryIDs(country), x_Country);
+    deaths1 = worldDeaths(countryIDs(country), x_Country_Extended);
     deaths1(isnan(deaths1))=0;
     N = length(wave1);
-    wave= wave1/sum(wave1);
-    deaths = deaths1/sum(deaths1);
-    for t = -20:0
-        x=wave(-t+1:endWave(country)-startWave(country)+1);
-        y=deaths((1):(endWave(country)-startWave(country)+1+t));
-        sigmaX = std(x);
-        sigmaY = std(y);
-        covXY = cov(x,y);
+    wave= wave1;
+    deaths = deaths1;
+    sigmaX = std(wave);
+    for t = 1:T
+        y=deaths(t:endWave(country)-startWave(country)+t);
+        y = y;
+        sigmaY = std(y);        
+        covXY = cov(wave ,y);
         %r=cov(X,Y)/(sigmaX*sigmaY)
-        pearsonValues(t+21, country)=covXY(1,2)/(sigmaX*sigmaY);
-    end
-     for t = 1:20
-        x=wave(1:endWave(country)-startWave(country)+1-t);
-        y=deaths((t+1):(endWave(country)-startWave(country)+1));
-        sigmaX = std(x);
-        sigmaY = std(y);
-        covXY = cov(x,y);
-        %r=cov(X,Y)/(sigmaX*sigmaY)
-        pearsonValues(t+21, country)=covXY(1,2)/(sigmaX*sigmaY);
+        pearsonValues(t, country)=covXY(1,2)/(sigmaX*sigmaY);
      end
 end
    
  for pdi = 1:N_countries
      figure(pdi)
      clf
-     plot(1:41, pearsonValues(:, pdi), 'LineWidth',2)
+     plot(1:T, pearsonValues(:, pdi), 'LineWidth',2)
      hold on
  end
 
@@ -68,15 +60,17 @@ maxPearsonValues = zeros(1,N_countries);
 for pdi = 1:N_countries
     [maximum,I] = max(max(pearsonValues(:, pdi)));
     %maxPearsonValuesIds(pdi) = I;
-    maxPearsonValues(pdi) = find(pearsonValues(:, pdi)==maximum)-20;        %-20 so that I can have values from -20 to 20
+    maxPearsonValues(pdi) = find(pearsonValues(:, pdi)==maximum)-tmax;        %-20 so that I can have values from -20 to 20
 end
 
-fprintf("Country %s has maximum correlation when deaths have a delay of %d days",...
-    countryNames(:),maxPearsonValues(:))
+for pdi = 1:N_countries
 
+fprintf("Country %s has maximum correlation when deaths have a delay of %d days \n",...
+    countryNames(pdi),maxPearsonValues(pdi))
+end
 %maxPearsonValues shows us that deaths indeed have a delay comparing with
 %the cases in the most of the cases.
-%In Task 4 the delay is [6, 1, 3, 14,19,7, 13,7,-12,8,11,12]
-%In Task 3 the delay is [0, 0, 0, 0, 30,19,0, 1, 2, 0, 1, 1] for
+%In Task 4 the delay is [6, 1, 11, 14,19,7, 14,13,-18,3,-1, 12]
+%In Task 3 the delay is [0, 0,  0, 0, 30,19,0, 1, 2, 0, 1, 1] for
 %distribution and       [-2,-2,16,19,18,6,27,4,-77,7, -2,8] for data
 %The 2 tasks do not give us the same result.

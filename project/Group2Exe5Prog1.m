@@ -29,6 +29,7 @@ Mse = zeros(20,N_countries);
 R2 = zeros(20,N_countries);
 adjR2 = zeros(20,N_countries);
 maxId = zeros(1,N_countries);
+maxadjR2 = zeros(N_countries, 1);
 %N_countries = x; to see the visualization of residuals for the x first
 %countries. WARNING.x*20 plots
 
@@ -36,21 +37,21 @@ for country = 1:N_countries
     %estarV = zeros(20,endWave(country)-startWave(country)+1); I do not
     %preallocate it because it changes size in every loop
     x_Country= startWave(country):1:endWave(country);
-    x_Country_Extended = (startWave(country)-20):1:(endWave(country)+20);
-    wave1 = world(countryIDs(country), x_Country);
+    x_Country_Extended = (startWave(country)-20):1:(endWave(country));
+    wave1 = world(countryIDs(country), x_Country_Extended);
     wave1(isnan(wave1))=0;
-    deaths1 = worldDeaths(countryIDs(country), x_Country_Extended);
+    deaths1 = worldDeaths(countryIDs(country), x_Country);
     deaths1(isnan(deaths1))=0;
     N = length(wave1);
     wave= wave1;
     deaths = deaths1;
-    n = endWave(country)-startWave(country)+1;
+    n = endWave(country)-startWave(country);
+    yV = deaths(1:n);
     for t = 1:20
-        xV = wave(1:n-t);
-        yV = deaths(1+t:n);
+        xV = wave(t:n+t-1);
         modelfun = @(b,xV)b(1)*xV(:)+b(2);
         beta0 = [1 1];
-        mdl = fitnlm(xV, yV,modelfun,beta0);
+        mdl = fitnlm(xV, yV, modelfun,beta0);
         b = table2array(mdl.Coefficients(:,1));
         s = corrcoef(xV, yV);
         corr = s(1, 2);
@@ -62,8 +63,8 @@ for country = 1:N_countries
         Se(t, country) = sqrt((n-1) * (Sy^2 - b1^2*Sx^2)/(n-2));
         Mse(t, country)=mdl.MSE;
         %-----------------------
-        R2(t, country) = mdl.Rsquared.Ordinary;     %R2
-        adjR2(t, country) = mdl.Rsquared.Adjusted;     %adjR2
+        R2(t, country) = mdl.Rsquared.Ordinary;          %R2
+        adjR2(t, country) = mdl.Rsquared.Adjusted;       %adjR2
         %-----------------------
         yhat = b(1)*xV(:)+b(2);
         k1 = 1; %1 is number of x
@@ -90,8 +91,7 @@ for country = 1:N_countries
     [B, I] = max(adjR2(:, country));
     maxId(country) = I;
     fprintf('For country %s the optimal delay is t =  %1.0f days and its adjR2 is %1.4f\n',countryNames(country),maxId(country),B);
-    
-    
+    maxadjR2(country) = B;
 end
 
 
@@ -112,8 +112,8 @@ end
 %even more accurate.The linear model is highly inefficient in most of
 %countries.
 
-%In Task 5 the delay is [20,20,19,1, 20,20,3, 2, 1, 20,1, 2]
-%In Task 4 the delay is [6, 1, 3, 14,19,7, 13,7,-12,8, 11,12]
+%In Task 5 the delay is [16, 14, 11, 8, 3, 15, 8, 9, 20, 14, 11, 6]
+%In Task 4 the delay is [6,   1, 11, 14, 19, 7, 14, 13,-18, 3,-1, 12]
 %In Task 3 the delay is [0, 0, 0, 0, 30,19,0, 1, 2, 0, 1, 1]
 %As we can see all tasks have significant differences 
 

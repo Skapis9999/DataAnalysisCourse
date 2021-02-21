@@ -58,7 +58,7 @@ ylabel('bootstrap $\bar{x}$','Interpreter','latex')
 title(sprintf('DISTRIBUTON B =%d bootstrap means for sample of n countries= %d',B,N_countries))
 
 %[h,p,ci,stats] = ttest(m);
-[h,p,ci,stats] = ttest(m,14);
+[h, p, ci, stats] = ttest(m,14);
 %
 
 m2 = bootstrp(B,@mean,peakDiffReal);
@@ -80,17 +80,17 @@ title(sprintf('REAL SAMPLE B =%d bootstrap means for sample of n countries= %d',
 [h2,p2,ci2,stats] = ttest(m2,14);
 
 function dateGap = findMax(caseDistribution,deathDistribution,i,N)
-    x = 1:N; %N is the wave duration
-    pd = zeros(2, N);
-    
-    pd_model = fitdist((x)', caseDistribution(i));
-    pd(1, :) = pdf(pd_model,x);
-    [~,i1] = max(pd(1, :));
-    
-    pd_model = fitdist((x)', deathDistribution(i));
-    pd(2, :) = pdf(pd_model,x);
-    [~,i2] = max(pd(2, :));
-    dateGap = i2-i1;
+x = 1:N; %N is the wave duration
+pd = zeros(2, N);
+
+pd_model = fitdist((x)', caseDistribution(i));
+pd(1, :) = pdf(pd_model,x);
+[~,i1] = max(pd(1, :));
+
+pd_model = fitdist((x)', deathDistribution(i));
+pd(2, :) = pdf(pd_model,x);
+[~,i2] = max(pd(2, :));
+dateGap = i2-i1;
 end
 
 function dateGap = findMaxReal(world, worldDeaths, countryIDs, country, startWave, endWave)
