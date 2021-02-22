@@ -18,4 +18,3 @@ endWave = [180, 200, 176, 150, 178, 170, 123, 139, 244, 142, 105, 117];
 
 N_countries = length(countryIDs);
 bestModel = zeros(20,N_countries); %20 betas from best model for N_countries countries
-
