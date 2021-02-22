@@ -34,9 +34,9 @@ for i = 1:N_countries
 end
 
 function [startwave, endwave] = findwave(percentage, cases)
-    M = max(cases);
+    M = max(rest');
     mean7 = movmean(cases,3);
-    startwave = find(mean7 < percentage * M);
-    startwave = max(startwave);
-    endwave = end;
+    startwave = find(mean7 < percentage * M and );
+    startwave = max(startwave)
+    endwave = 
 end 
