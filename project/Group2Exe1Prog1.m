@@ -14,9 +14,14 @@ if(world(1,1) < 43830)   %43831 is the first date
 end
 
 belgiumID=14+j;
+
+
 Start = 60;
 End = 180;
 pd_count = 17;
+
+percentage = 0.02
+[Start End] = findwave(percentage, world(belgiumID, 1:200));
 
 waveBelgium1 = world(belgiumID,Start:End);
 DeathsBelgium1 = worldDeaths(belgiumID,Start:End);
@@ -37,7 +42,7 @@ Dist_Names = strings(pd_count,1);
 
 figure(1)
 clf
-plot(waveBelgium1)
+plot(world(belgiumID, Start:End))
 x = 1:N;
 
 [pd , Dist_Names] = AllDistributions(x, pd, Dist_Names);
@@ -59,12 +64,16 @@ for pdi =  1:pd_count
 end
 
 [B, I] = sort(MSE_Cases);
-
+fprintf('The MSE test for Cases has resulted in the following sorting of the distributions in ascneding order:\n')
 Dist_Names(I);
-B;
- figure(pd_count+2)
- plot(DeathsBelgium/sum(DeathsBelgium))
- hold on
+ fprintf("Distribution \t \t MSE\n")
+for i = 1:length(Dist_Names)
+    fprintf("%s \t \t \t %s \n",Dist_Names(I(i)), MSE_Cases(I(i)))
+end
+
+figure(pd_count+2)
+plot(DeathsBelgium/sum(DeathsBelgium))
+hold on
 
 for pdi =  1:pd_count
     for sample = 1:N
@@ -73,8 +82,13 @@ for pdi =  1:pd_count
 end
 [B, I] = sort(MSE_Deaths);
 Dist_Names(I);
-B;
 
+fprintf('\nThe MSE test for Deaths has resulted in the following sorting of the distributions in ascneding order:\n')
+Dist_Names(I);
+ fprintf("Distribution \t \t MSE\n")
+for i = 1:length(Dist_Names)
+    fprintf("%s \t \t \t %s \n",Dist_Names(I(i)), MSE_Deaths(I(i)))
+end
 %%finding the optimal distribution
 function [pd, Dist_Names] = AllDistributions(x, pd, Dist_Names)
     pd_model = fitdist((x)', 'Normal');
@@ -102,23 +116,23 @@ function [pd, Dist_Names] = AllDistributions(x, pd, Dist_Names)
     pd(6, :)=pdf(pd_model, x);
 
     pd_model = fitdist((x)', 'ExtremeValue');
-    Dist_Names(6, :) =  pd_model.DistributionName;
+    Dist_Names(7, :) =  pd_model.DistributionName;
     pd(7, :)=pdf(pd_model, x);
 
     pd_model = fitdist((x)', 'Gamma');
-    Dist_Names(7, :) =  pd_model.DistributionName;
+    Dist_Names(8, :) =  pd_model.DistributionName;
     pd(8, :)=pdf(pd_model, x);
 
     pd_model = fitdist((x)', 'GeneralizedExtremeValue');
-    Dist_Names(8, :) =  pd_model.DistributionName;
+    Dist_Names(9, :) =  pd_model.DistributionName;
     pd(9, :)=pdf(pd_model, x);
 
     pd_model = fitdist((x)', 'HalfNormal');
-    Dist_Names(9, :) =  pd_model.DistributionName;
+    Dist_Names(10, :) =  pd_model.DistributionName;
     pd(10, :)=pdf(pd_model, x);
 
     pd_model = fitdist((x)', 'InverseGaussian');
-    Dist_Names(10, :) =  pd_model.DistributionName;
+    Dist_Names(11, :) =  pd_model.DistributionName;
     pd(11, :)=pdf(pd_model, x);
 
     pd_model = fitdist((x)', 'Kernel');
@@ -146,21 +160,32 @@ function [pd, Dist_Names] = AllDistributions(x, pd, Dist_Names)
     Dist_Names(17, :) =  pd_model.DistributionName;
 
 end
-
+function [startwave, endwave] = findwave(percentage, cases)
+    [M,I] = max(cases);
+    mean7 = movmean(cases,3);       %second orisma is how many days you count to confirm the end or the start of a wave
+    startwaveIndeces = find((mean7 < percentage * M));
+    acceptableStart = startwaveIndeces < I;
+    startwave = max(startwaveIndeces.*acceptableStart);
+    acceptableEnd = startwaveIndeces > I;
+    [maxValue,I] = max(acceptableEnd);
+    endwave = startwaveIndeces(I(1));
+    if(maxValue==0)
+       endwave = length(cases);
+    end            
+end 
 %% Comments
 
 % We observe that for the Cases the minimum values for the Least Square Error
-% is achieved for the Negative Binomial Distribution, while the General
-% Extreme Value Distribution, the Weibull and Rayleigh distributions have
-% simillar values.
+% is achieved for the Lognormal, while the Gamma, Negative Binomial
+% Distribution and the Weibull distributions have simillar values.
 
 % We note that for the Deaths the Least Square Error is achieved for the 
-% Rayleigh distribution, although Rician, Weibull and Negative Binomial
-% have also simillar values.
+% Negative Binomial, although Gamma, Lognormal and Weibull have also 
+% simillar values.
 
 
 % As a result, cases and deaths do not follow the same distribution but the
-% same distribution, for example Rayleigh, Weibull and negative Binomial
-% estimate both the cases and deaths with high accuracy.
+% same distribution, for example Gamma, Lognormal, Negative Binomial and
+% Weibull estimate both the cases and deaths with high accuracy.
 
 

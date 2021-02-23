@@ -24,15 +24,6 @@ start2 = zeros(N_countries);
 end2 = zeros(N_countries);
 
 
-% for country = 1:N_countries
-%     rest = NaN(world(end)-endWave(country));
-%     rest(country) = world(countryIDs(country), endWave(country):end);
-% % [M,I] = max(rest');
-% % %for j = endWave(7):l
-% %  mean7 = movmean(rest,3)
-%         
-% end
-
 for i = 1:N_countries
     rest = world(countryIDs(i), endWave(i):end);
     [startX,endX]=findwave(0.05, rest);                 %first orisma is acceptance percentage of the max in the same wave.
