@@ -16,12 +16,15 @@ if(world(1,1) < 43830)   %43831 is the first date
 end
 
 countryIDs = [14+j, 148+j, 66+j, 53+j, 104+j, 68+j, 9+j,...
-    135+j, 134+j, 131+j, 125+j, 126+j];
-countryNames = ["Belgium", "UK", "Ireland", "Germany", "Norway", "Italy", "Austria", "Sweden",...
-    "Switzerland", "Spain", "Slovakia", "Slovenia"];
+    134+j, 135+j, 131+j, 125+j, 126+j];
 
-startWave = [60, 60, 65, 60, 58, 58, 64, 64, 50, 60, 66, 68];
-endWave = [180, 200, 176, 150, 178, 170, 123, 139, 244, 142, 105, 117];
+startWave = [63, 69, 72, 64, 62, 56, 68, 64, 64, 65, 70, 65];
+endWave = [200, 200, 158, 200, 137, 172, 153, 200, 138, 185, 131, 135];
+
+
+
+% startWave = [60, 60, 65, 60, 58, 58, 64, 64, 50, 60, 66, 68];
+% endWave = [180, 200, 176, 150, 178, 170, 123, 139, 244, 142, 105, 117];
 
 N_countries = length(countryIDs);
 Se = zeros(20,N_countries);
@@ -112,9 +115,10 @@ end
 %even more accurate.The linear model is highly inefficient in most of
 %countries.
 
-%In Task 5 the delay is [16, 14, 11, 8, 3, 15, 8, 9, 20, 14, 11, 6]
-%In Task 4 the delay is [6,   1, 11, 14, 19, 7, 14, 13,-18, 3,-1, 12]
-%In Task 3 the delay is [0, 0, 0, 0, 30,19,0, 1, 2, 0, 1, 1]
+%In Task 5 the delay is [16, 14, 11, 8, 3, 15, 8, 20, 9, 14, 11, 6]
+%In Task 4 the delay is [6,  1,  11, 14, 19, 7, 13 ,-18, 13, 8, 11, 12]
+%In Task 3 the delay is [0,  23, 21, 22, 20, 31, 0, -30, 12,  0, -5, 18] for
+%distribution and       [-2, -2, 16, 19, 18, 6, 27,  4, -21, 84, -1, 8] for data
 %As we can see all tasks have significant differences 
 
 %Problems faced:

@@ -1,4 +1,4 @@
-%For [0,20] I predict y deaths with x(t-Ο„) cases
+%For [0,20] I predict y deaths with x(t-�?�?) cases
 %Compare and find best latency
 %Diagnostic with standarised errror
 %
@@ -14,19 +14,22 @@ j = 0;
 if(world(1,1) < 43830)   %43831 is the first date
     j = -1;
 end
-
 countryIDs = [14+j, 148+j, 66+j, 53+j, 104+j, 68+j, 9+j,...
-    135+j, 134+j, 131+j, 125+j, 126+j];
+    134+j, 135+j, 131+j, 125+j, 126+j];
+
+startWave = [63, 69, 72, 64, 62, 56, 68, 64, 64, 65, 70, 65];
+endWave = [200, 200, 158, 200, 137, 172, 153, 200, 138, 185, 131, 135];
 countryNames = ["Belgium", "UK", "Ireland", "Germany", "Norway", "Italy", "Austria", "Sweden",...
     "Switzerland", "Spain", "Slovakia", "Slovenia"];
 
-startWave = [60, 60, 65, 60, 58, 58, 64, 64, 50, 60, 66, 68];
-endWave = [180, 200, 176, 150, 178, 170, 123, 139, 244, 142, 105, 117];
+% startWave = [60, 60, 65, 60, 58, 58, 64, 64, 50, 60, 66, 68];
+% endWave = [180, 200, 176, 150, 178, 170, 123, 139, 244, 142, 105, 117];
 N_countries = length(countryIDs);
 adjR2 = zeros(N_countries, 1);
 adjR2_all = zeros(N_countries, 1);
-adjR2Exe5 = [0.795969995211820;0.760357428783247;0.435957817392143;0.822384144098678;0.449395432127319;0.906569851640084;0.492221802806972;0.533484292805293;0.166566277312669;0.840083471088131;0.369445584788788;0.469638686681325]
+adjR2Exe5 = [0.808426154052327;0.748470277966808;0.385657468385570;0.842811373984178;0.382257391395039;0.910064810959179;0.509895054476373;0.0293056417004169;0.528392207294207;0.550747246401131;0.205218006355398;0.429026153815098]
 Model = zeros(N_countries, 20);
+bestBetas = NaN(N_countries,21);
 
 for country = 1:N_countries
     %estarV = zeros(20,endWave(country)-startWave(country)+1); I do not
@@ -56,6 +59,7 @@ for country = 1:N_countries
     indxV = find(inmodel==1);
     Model(country, :) = inmodel;
     rem = ([b0;bV].*[1 inmodel]');
+    bestBetas(country, :) = rem;
     yhatV = xM * rem;
     eV = yV'-yhatV;
     k1 = sum(inmodel);

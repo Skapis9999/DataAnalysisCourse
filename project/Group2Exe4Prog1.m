@@ -5,9 +5,9 @@ clear all
 countryNames = ["Belgium", "UK", "Ireland", "Germany", "Norway", "Italy", "Austria", "Sweden",...
     "Switzerland", "Spain", "Slovakia", "Slovenia"];
 
-caseDistribution = ["Rayleigh", "Rayleigh","Rayleigh","Rayleigh","Lognormal",...
-    "Negative Binomial ", "Rayleigh","Rayleigh","Rayleigh","Rayleigh",...
-    "Rayleigh","Rayleigh"];
+caseDistribution = ["Lognormal", "Negative Binomial","Lognormal","Negative Binomial","Lognormal",...
+    "Lognormal", "Lognormal","Extreme Value","Negative Binomial","Lognormal",...
+    "Logistic","Lognormal"];
 
 world = table2array(readtable('Covid19Confirmed.xlsx','Range','D1:MM157'));
 worldDeaths = table2array(readtable('Covid19Deaths.xlsx','Range','D1:MM157'));
@@ -15,15 +15,21 @@ j = 0;
 if(world(1,1) < 43830)   %43831 is the first date
     j = -1;
 end
+% 
+% countryIDs = [14+j, 148+j, 66+j, 53+j, 104+j, 68+j, 9+j,...
+%     135+j, 134+j, 131+j, 125+j, 126+j];
+% 
+% startWave = [60, 60, 65, 60, 58, 58, 64, 64, 50, 60, 66, 68];
+% endWave = [180, 200, 176, 150, 178, 170, 123, 139, 244, 142, 105, 117];
 
 countryIDs = [14+j, 148+j, 66+j, 53+j, 104+j, 68+j, 9+j,...
-    135+j, 134+j, 131+j, 125+j, 126+j];
+    134+j, 135+j, 131+j, 125+j, 126+j];
 
-startWave = [60, 60, 65, 60, 58, 58, 64, 64, 50, 60, 66, 68];
-endWave = [180, 200, 176, 150, 178, 170, 123, 139, 244, 142, 105, 117];
+startWave = [63, 69, 72, 64, 62, 56, 68, 64, 64, 65, 70, 65];
+endWave = [200, 200, 158, 200, 137, 172, 153, 200, 138, 185, 131, 135];
 
-T = 40
-tmax = 20
+T = 40;
+tmax = 20;
 N_countries = length(countryIDs);
 pearsonValues = zeros(40, N_countries); %40 because I get -20 to 20
 
@@ -70,7 +76,7 @@ fprintf("Country %s has maximum correlation when deaths have a delay of %d days 
 end
 %maxPearsonValues shows us that deaths indeed have a delay comparing with
 %the cases in the most of the cases.
-%In Task 4 the delay is [6, 1, 11, 14,19,7, 14,13,-18,3,-1, 12]
-%In Task 3 the delay is [0, 0,  0, 0, 30,19,0, 1, 2, 0, 1, 1] for
-%distribution and       [-2,-2,16,19,18,6,27,4,-77,7, -2,8] for data
+%In Task 4 the delay is [6,  1,  11, 14, 19, 7, 13 ,-18, 13, 8, 11, 12]
+%In Task 3 the delay is [0,  23, 21, 22, 20, 31, 0, -30, 12,  0, -5, 18] for
+%distribution and       [-2, -2, 16, 19, 18, 6, 27,  4, -21, 84, -1, 8] for data
 %The 2 tasks do not give us the same result.
