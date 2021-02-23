@@ -12,15 +12,10 @@ j = 0;
 if(world(1,1) < 43830)   %43831 is the first date
     j = -1;
 end
-
 belgiumID=14+j;
-
-
-Start = 60;
-End = 180;
 pd_count = 17;
 
-percentage = 0.02
+percentage = 0.02;
 [Start End] = findwave(percentage, world(belgiumID, 1:200));
 
 waveBelgium1 = world(belgiumID,Start:End);
@@ -66,9 +61,10 @@ end
 [B, I] = sort(MSE_Cases);
 fprintf('The MSE test for Cases has resulted in the following sorting of the distributions in ascneding order:\n')
 Dist_Names(I);
- fprintf("Distribution \t \t MSE\n")
+ fprintf("MSE \t \t \t Distribution\n")
+ fprintf("-------------------------------\n")
 for i = 1:length(Dist_Names)
-    fprintf("%s \t \t \t %s \n",Dist_Names(I(i)), MSE_Cases(I(i)))
+    fprintf("%s \t %s \n", MSE_Cases(I(i)), Dist_Names(I(i)))
 end
 
 figure(pd_count+2)
@@ -83,11 +79,12 @@ end
 [B, I] = sort(MSE_Deaths);
 Dist_Names(I);
 
-fprintf('\nThe MSE test for Deaths has resulted in the following sorting of the distributions in ascneding order:\n')
+fprintf('\nThe MSE test for Deaths has resulted in the following\nsorting of the distributions in ascneding order:\n')
 Dist_Names(I);
- fprintf("Distribution \t \t MSE\n")
+ fprintf("MSE \t \t \t Distribution\n")
+ fprintf("-------------------------------\n")
 for i = 1:length(Dist_Names)
-    fprintf("%s \t \t \t %s \n",Dist_Names(I(i)), MSE_Deaths(I(i)))
+    fprintf("%s \t %s \n", MSE_Deaths(I(i)), Dist_Names(I(i)))
 end
 %%finding the optimal distribution
 function [pd, Dist_Names] = AllDistributions(x, pd, Dist_Names)
