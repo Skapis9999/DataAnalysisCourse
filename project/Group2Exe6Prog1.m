@@ -30,6 +30,7 @@ adjR2_all = zeros(N_countries, 1);
 adjR2Exe5 = [0.808426154052327;0.748470277966808;0.385657468385570;0.842811373984178;0.382257391395039;0.910064810959179;0.509895054476373;0.0293056417004169;0.528392207294207;0.550747246401131;0.205218006355398;0.429026153815098]
 Model = zeros(N_countries, 20);
 bestBetas = NaN(N_countries,21);
+ks = NaN(N_countries,1);
 
 for country = 1:N_countries
     %estarV = zeros(20,endWave(country)-startWave(country)+1); I do not
@@ -63,11 +64,13 @@ for country = 1:N_countries
     yhatV = xM * rem;
     eV = yV'-yhatV;
     k1 = sum(inmodel);
+    ks(country) = k1;
     se2 = (1/(n-(k1+1)))*(sum(eV.^2));
     se = sqrt(se2);
     R2 = 1-(sum(eV.^2))/(sum((yV-my).^2));
     adjR2(country) =1-((n-1)/(n-(k1+1)))*(sum(eV.^2))/(sum((yV'-my).^2));
     estarV = eV / se;
+
     figure(country*2 -1)
     clf
     plot(yV,estarV,'o')
