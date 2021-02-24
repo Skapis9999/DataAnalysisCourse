@@ -27,6 +27,7 @@ bestBetas = [-13.6195003075017,-0.00742018464551680,0,0,0,0,0,0,0,0,0,0,0.025726
 ks = [8;8;6;6;2;2;3;2;7;2;2;3]; %number of acceptable betas per country
 adjR2Real = [0.976337025540285;0.896443075822148;0.623054234648782;0.920980211476517;0.433425459108227;0.950976649195803;0.589875116942397;0.0805906456495319;0.754729523343698;0.573124788625315;0.322301677682662;0.553954356706783];
 N_countries = length(countryIDs);
+%R2PCR = NaN(1:length(countryIDs));
 
 for country = 1:N_countries
     %SVD
@@ -55,9 +56,10 @@ for country = 1:N_countries
     bPCRV = vM * diag(lambdaV) * inv(sigmaM) * uM'* ycV';
     bPCRV = [my - mxV*bPCRV; bPCRV];
     yfitPCRV = [ones(n,1) xM] * bPCRV; 
-    resPCRV = yfitPCRV - yV;     % Calculate residuals
+    resPCRV = yfitPCRV - yV';     % Calculate residuals
     RSSPCR = sum(resPCRV.^2);
     rsquaredPCR = 1 - RSSPCR/TSS;
+    %R2PCR(country) = rsquaredPCR;
     figure(2*country-1)
     clf
     plot(yV,yfitPCRV,'.')
@@ -76,4 +78,4 @@ for country = 1:N_countries
     title('PCR')
 end
 
-
+%R^2 for PCR are 
