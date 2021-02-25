@@ -28,9 +28,6 @@ N_countries = length(countryIDs);
 peakDiff = NaN(1,N_countries );
 peakDiffReal = NaN(1,N_countries );
 
-% waveD = [180-60, 200-60, 176-65, 150-60, 170-58, 170-58, 123-64, 139-64,...
-%     244-50, 142-60, 105-66, 117-68];
-
 waveD2 = endWave - startWave;
 
 for country = 1:N_countries
@@ -50,8 +47,7 @@ for iB=1:B
     xbV = peakDiffReal(rV);
     bootmxV(iB) = mean(xbV);
 end
-%m = bootstrp(B,@mean,peakDiff);
-%[fi,xi] = ksdensity(m);
+
 figure(1)
 clf
 hist(bootmxV, bins)
@@ -66,10 +62,9 @@ yaxV = ylim;
 plot(14*[1 1],yaxV,'g')
 xlabel('$\bar{x}$','Interpreter','latex')
 ylabel('bootstrap $\bar{x}$','Interpreter','latex')
-title(sprintf('DISTRIBUTON B =%d bootstrap means for sample of n countries= %d',B,N_countries))
+title(sprintf('Peak difference from samples, \nB =%d bootstrap means for sample of n countries= %d',B,N_countries))
 
-%[h,p,ci,stats] = ttest(m);
-[h, p, ci, stats] = ttest(m2,14);
+[h1, p, ci, stats] = ttest(peakDiffReal,14);
 %
 lowBoot = floor((B+1)*alpha/2);
 upBoot = floor(B-1-lowBoot);
@@ -79,8 +74,6 @@ for iB=1:B
     xbV = peakDiffReal(rV);
     bootmxV(iB) = mean(xbV);
 end
-% m2 = bootstrp(B,@mean,peakDiffReal);
-% [fi,xi] = ksdensity(m2);
 figure(2)
 clf
 hist(bootmxV, bins)
@@ -95,10 +88,9 @@ yaxV = ylim;
 plot(14*[1 1],yaxV,'g')
 xlabel('$\bar{x}$','Interpreter','latex')
 ylabel('bootstrap $\bar{x}$','Interpreter','latex')
-title(sprintf('REAL SAMPLE B =%d bootstrap means for sample of n countries= %d',B,N_countries))
+title(sprintf('Peak difference from estimation, \nB =%d bootstrap means for sample of n countries= %d',B,N_countries))
 
-%[h,p,ci,stats] = ttest(m2);
-[h2,p2,ci2,stats] = ttest(m2,14);
+[h2,p2,ci2,stats] = ttest(peakDiff,14);
 
 function dateGap = findMax(caseDistribution,deathDistribution,i,N)
 x = 1:N; %N is the wave duration
@@ -132,3 +124,7 @@ end
 % The bootstrap method for both the real and estimated peak difference
 % between the deaths and the cases has shown that we cannot reject the mean
 % being 14 days.
+
+% For both the real and estimated difference of the peaks between deaths
+% and cases the ttest results in a failure to reject the null hypothesis
+% for the mean to be 14.

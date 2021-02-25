@@ -15,12 +15,7 @@ j = 0;
 if(world(1,1) < 43830)   %43831 is the first date
     j = -1;
 end
-% 
-% countryIDs = [14+j, 148+j, 66+j, 53+j, 104+j, 68+j, 9+j,...
-%     135+j, 134+j, 131+j, 125+j, 126+j];
-% 
-% startWave = [60, 60, 65, 60, 58, 58, 64, 64, 50, 60, 66, 68];
-% endWave = [180, 200, 176, 150, 178, 170, 123, 139, 244, 142, 105, 117];
+
 
 countryIDs = [14+j, 148+j, 66+j, 53+j, 104+j, 68+j, 9+j,...
     134+j, 135+j, 131+j, 125+j, 126+j];
@@ -49,7 +44,6 @@ for country = 1:N_countries
         y = y;
         sigmaY = std(y);        
         covXY = cov(wave ,y);
-        %r=cov(X,Y)/(sigmaX*sigmaY)
         pearsonValues(t, country)=covXY(1,2)/(sigmaX*sigmaY);
      end
 end
@@ -57,15 +51,16 @@ end
  for pdi = 1:N_countries
      figure(pdi)
      clf
-     plot(1:T, pearsonValues(:, pdi), 'LineWidth',2)
+     plot((1-tmax:T-tmax), pearsonValues(:, pdi), 'LineWidth',2)
+     title(sprintf('Pearson correlation coefficient \n for country %s ',countryNames(pdi)));
+     xlabel('\tau')
+     ylabel('r(\tau)');
      hold on
  end
 
 maxPearsonValues = zeros(1,N_countries); 
-%maxPearsonValuesIds = zeros(1,N_countries); mallon ahristo
 for pdi = 1:N_countries
     [maximum,I] = max(max(pearsonValues(:, pdi)));
-    %maxPearsonValuesIds(pdi) = I;
     maxPearsonValues(pdi) = find(pearsonValues(:, pdi)==maximum)-tmax;        %-20 so that I can have values from -20 to 20
 end
 

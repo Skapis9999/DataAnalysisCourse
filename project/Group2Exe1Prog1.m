@@ -32,13 +32,16 @@ pd = zeros(pd_count, N);
 Dist_Names = strings(pd_count,1);
 
 
-%we observe that the first day of the first wave is the 60th day with 18
-%cases and the last day of the first wave is the 152nd day with 61 cases
+% we observe that the first day of the first wave is the 60th day with 18
+% cases and the last day of the first wave is the 152nd day with 61 cases
 
 figure(1)
 clf
 plot(world(belgiumID, Start:End))
 x = 1:N;
+xlabel('days')
+ylabel('cases')
+title(sprintf('Cases for Belgium during the pandemic first wave'))
 
 [pd , Dist_Names] = AllDistributions(x, pd, Dist_Names);
 for pdi = 1:pd_count
@@ -47,6 +50,10 @@ for pdi = 1:pd_count
     plot(x, pd(pdi, :), 'LineWidth',2)
     hold on
     plot(waveBelgium)
+    xlabel('days')
+    ylabel('probability distribution')
+    title(sprintf('First wave of the pandemic for Belgium, \nDistribution %s', Dist_Names(pdi)))
+    legend(Dist_Names(pdi), 'Belgium Case Distibution')
 end
 
 % Due to chi square test giving too small values, we decided to use the
@@ -69,7 +76,9 @@ end
 
 figure(pd_count+2)
 plot(DeathsBelgium/sum(DeathsBelgium))
-hold on
+xlabel('days')
+ylabel('probability distribution of deaths')
+title(sprintf('First wave of the pandemic for Belgium, distribution of deaths'))
 
 for pdi =  1:pd_count
     for sample = 1:N
@@ -86,7 +95,7 @@ Dist_Names(I);
 for i = 1:length(Dist_Names)
     fprintf("%s \t %s \n", MSE_Deaths(I(i)), Dist_Names(I(i)))
 end
-%%finding the optimal distribution
+%% finding the optimal distribution
 function [pd, Dist_Names] = AllDistributions(x, pd, Dist_Names)
     pd_model = fitdist((x)', 'Normal');
     Dist_Names(1, :) = pd_model.DistributionName;
@@ -159,7 +168,7 @@ function [pd, Dist_Names] = AllDistributions(x, pd, Dist_Names)
 end
 function [startwave, endwave] = findwave(percentage, cases)
     [M,I] = max(cases);
-    mean7 = movmean(cases,3);       %second orisma is how many days you count to confirm the end or the start of a wave
+    mean7 = movmean(cases,3);       % second argument is how many days you count to confirm the end or the start of a wave
     startwaveIndeces = find((mean7 < percentage * M));
     acceptableStart = startwaveIndeces < I;
     startwave = max(startwaveIndeces.*acceptableStart);

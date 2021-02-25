@@ -36,7 +36,7 @@ for country = 1:N_countries
     [startX,endX]=findwave(0.05, rest);                 %first orisma is acceptance percentage of the max in the same wave.
     start2(country)= startX + endWave(country);
     end2(country) = endX + endWave(country);
-    %figure indicating the limits of the second wave 
+%     figure indicating the limits of the second wave 
 %     figure(country)
 %     clf
 %     plot(world(countryIDs(country), 1:end))
@@ -72,7 +72,8 @@ for country = 1:N_countries
     line([end2(country)-start2(country),end2(country)-start2(country)], ylim, 'Color', 'k', 'LineWidth', 1); % Draw line for Y axis.
     xlabel('deaths')
     ylabel('days of the second wave')
-    title(sprintf('Deaths according to the model created in Exe6 and real deaths for country %s', countryNames(country))); 
+    title(sprintf('Deaths according to the model created in Exe6\n and real deaths for country %s', countryNames(country))); 
+    hold on
     legend('yhat','y')
     
     se2 = (1/(n-(ks(country)+1)))*(sum(eV.^2));
@@ -88,13 +89,13 @@ for country = 1:N_countries
     plot([ax(1) ax(2)],-zcrit*[1 1],'c--')
     xlabel('y')
     ylabel('e^*')
-    title(sprintf('diagnostic plot, model from stepwise regression,\n using all delayed cases for country %s', countryNames(country)));
+    title(sprintf('Diagnostic plot, \nmodel from stepwise regression \n using all delayed cases for country: %s', countryNames(country)));
     
     
 end
 
 for country = 1:N_countries
-    fprintf('For country %s the adjR2 for learning space is %1.4f while for judging space is %1.4f\n',countryNames(country), adjR2Real(country), adjR2(country));        
+    fprintf('For country %s the adjR2 in the training space is %1.4f while in the evaluating space is %1.4f\n',countryNames(country), adjR2Real(country), adjR2(country));        
 end
 
 %-------------------------------------------------------------------

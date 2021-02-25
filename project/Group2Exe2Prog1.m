@@ -80,6 +80,9 @@ for country = 1:N_countries
     clf
     plot(wave)
     hold on
+    xlabel('days')
+    ylabel('cases')
+    title(sprintf('First wave of the pandemic for: %s',countryNames(country)))
     N = length(wave);
     wave_p = wave(:)/sum(wave(:));
     deaths_p = deaths(:)/sum(deaths);
@@ -93,7 +96,7 @@ end
 % Old Deaths: [180, 200, 176, 150, 178, 170, 123, 139, 244, 142, 105, 117];
 % New Deaths: [200, 200, 158, 200, 137, 172, 153, 200, 138, 185, 131, 135]
 
-fprintf('So our results are here: \n')
+fprintf('The results are here: \n')
  for j = 1:N_countries
      fprintf('---------------------------------------------\n')
      if((MSE_Cases_Values(1,j) > 0.8 * MSE_Cases_Values(2,j))&&(0.8 * MSE_Cases_Values(1,j) < MSE_Cases_Values(2,j)))
@@ -103,10 +106,7 @@ fprintf('So our results are here: \n')
          fprintf('%s is optimized with distribution %s for cases\n', countryNames(j),pd_cases(1,j))
      end
      if((MSE_Cases_Values(3,j) > 0.8 * MSE_Cases_Values(4,j))&&(0.8 * MSE_Cases_Values(3,j) < MSE_Cases_Values(4,j)))
-         fprintf('%s can use the default distribution (%s) for deaths\n', countryNames(j), Distribution)
-     elseif(isnan(MSE_Cases_Values(3,j)))
-         fprintf('Its the fucking UK It uses Rayleigh\n')
-         continue;
+         fprintf('%s can use the default distribution (%s) for deaths\n', countryNames(j), Distribution);
      else
          fprintf('%s cannot use the default distribution (%s) for deaths\n', countryNames(j), Distribution)
          fprintf('%s is optimized with %s distribution for deaths\n', countryNames(j), pd_deaths(1,j))
@@ -226,7 +226,7 @@ end
 
 function [startwave, endwave] = findwave(percentage, cases)
     [M,I] = max(cases);
-    mean7 = movmean(cases,3);       %second orisma is how many days you count to confirm the end or the start of a wave
+    mean7 = movmean(cases,3);       %second argument is how many days you count to confirm the end or the start of a wave
     startwaveIndeces = find((mean7 < percentage * M));
     acceptableStart = startwaveIndeces < I;
     startwave = max(startwaveIndeces.*acceptableStart);

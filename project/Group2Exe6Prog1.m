@@ -27,7 +27,7 @@ countryNames = ["Belgium", "UK", "Ireland", "Germany", "Norway", "Italy", "Austr
 N_countries = length(countryIDs);
 adjR2 = zeros(N_countries, 1);
 adjR2_all = zeros(N_countries, 1);
-adjR2Exe5 = [0.808426154052327;0.748470277966808;0.385657468385570;0.842811373984178;0.382257391395039;0.910064810959179;0.509895054476373;0.0293056417004169;0.528392207294207;0.550747246401131;0.205218006355398;0.429026153815098]
+adjR2Exe5 = [0.808426154052327;0.748470277966808;0.385657468385570;0.842811373984178;0.382257391395039;0.910064810959179;0.509895054476373;0.0293056417004169;0.528392207294207;0.550747246401131;0.205218006355398;0.429026153815098];
 Model = zeros(N_countries, 20);
 bestBetas = NaN(N_countries,21);
 ks = NaN(N_countries,1);
@@ -55,7 +55,7 @@ for country = 1:N_countries
     k = size(xM,2);
     n = length(yV);
     zcrit = norminv(1-alpha/2);
-    [bV,~,~,inmodel,stats]=stepwisefit(xM(:, 2:end), yV');
+    [bV,~,~,inmodel,stats]=stepwisefit(xM(:, 2:end), yV','Display','off');
     b0 = stats.intercept;
     indxV = find(inmodel==1);
     Model(country, :) = inmodel;
@@ -81,7 +81,7 @@ for country = 1:N_countries
     plot([ax(1) ax(2)],-zcrit*[1 1],'c--')
     xlabel('y')
     ylabel('e^*')
-    title(sprintf('diagnostic plot, model from stepwise regression,\n using... only %d delayed cases for country %s', k1, countryNames(country)));
+    title(sprintf('Diagnostic plot\n model from stepwise regression \n using only %d delayed cases for country: %s', k1, countryNames(country)));
     % -----------------------------
     yhatV_all = xM * [b0; bV];
     eV = yV'-yhatV;
@@ -101,7 +101,7 @@ for country = 1:N_countries
     plot([ax(1) ax(2)],-zcrit*[1 1],'c--')
     xlabel('y')
     ylabel('e^*')
-    title(sprintf('diagnostic plot, model from stepwise regression,\n using all delayed cases for country %s', countryNames(country)));
+    title(sprintf('Diagnostic plot\n model from stepwise regression \n using all delayed cases for country: %s', countryNames(country)));
     
 end
 
@@ -135,7 +135,7 @@ end
 
 % Additionally, the stepwisefit regression model that reduses the dimension 
 % of the regression results in an optimization of the adjustment R square 
-% factor in all  cases.
+% factor in all cases.
 
 % We have also found the number of variables needed to describe the model
 % after the stepwisefit procedure has been performed and they are in almost
